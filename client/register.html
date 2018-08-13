@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h2>Register Forms</h2>
+
+    <form>
+        Name:
+        <br>
+        <input type="text" name="name" placeholder="insert name" id="name">
+        <br>Email:
+        <br>
+        <input type="email" name="email" placeholder="insert email" id="email">
+        <br> Password:
+        <br>
+        <input type="password" name="password" placeholder="insert password" id="password">
+        <br>
+        <br>
+        <input type="submit" value="Submit" onclick="register()">
+        
+    </form>
+    
+    <button onclick="test()">clickme2</button>
+
+
+
+    <script>
+
+        function test() {
+            console.log('test massuuuk');    
+        }
+        function register() {
+            let name = $("#name").val()
+            let email = $("#email").val()
+            let password = $("#password").val()
+            console.log('masuuuk', name);
+            axios.post('http://localhost:3000/users/register', {
+                name,
+                email,
+                password
+            })
+                .then(newUser => {
+                    localStorage.setItem('token', newUser.data.token)
+                    localStorage.setItem('name', newUser.data.data.name)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+    </script>
+
+
+</body>
+
+</html>

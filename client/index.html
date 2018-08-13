@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '288262381979390',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v3.1'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                console.log('------respons----',response);
+                if (response.status == 'connected') {
+                    axios.post('http://localhost:3000/users/loginFb',
+                        response.authResponse)
+                        .then((result) => {
+                            console.log('====result====',result);
+                            localStorage.setItem('token', result.data.token) //menyimpan ke localstorage
+                        }).catch((err) => {
+                            console.log(err);
+                        });
+                }
+            });
+        }
+
+        function login() {
+            let email = $('#email').val()
+            let password = $('#password').val()
+            axios.post('http://localhost:3000/users/login', {
+                email,
+                password
+            })
+                .then(dataLogin => {
+                    localStorage.setItem('token', dataLogin.data.token)
+                    localStorage.setItem('name', dataLogin.data.user.name)
+                    // console.log(data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+
+        function logOut() {
+            localStorage.removeItem('token')
+        }
+    </script>
+
+
+    <h2>Login Forms</h2>
+
+    <form action="/action_page.php">
+        Email:
+        <br>
+        <input type="email" name="email" placeholder="insert email" id="email">
+        <br> Password:
+        <br>
+        <input type="password" name="password" placeholder="insert password" id="password">
+        <br>
+        <br>
+        <input type="submit" value="Submit" onclick="login">
+    </form>
+
+    <br>
+    <label>
+        <a href="http://localhost:8080/register.html">create account</a>
+    </label>
+    <br>
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
+
+
+
+
+</body>
+
+</html>
