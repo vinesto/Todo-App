@@ -2,15 +2,16 @@ const Model = require('../models/task')
 const axios = require('axios')
 
 const createTask = function(req, res) {
-    // console.log(req.body);
+    console.log(req.body);
     
-    let { taskName,dueDate } = req.body;
+    let { taskName,dueDate,description } = req.body;
     Model.create({
         taskName: taskName,
-        // dueDate:dueDate
+        description:description,
+        dueDate:dueDate
     })
         .then(function (data) {
-            res.status(201).json({ msg: 'new task added', data: data })
+            res.status(200).json({ msg: 'new task added', data: data })
         })
         .catch(function (err) {
             res.status(500).json({ msg: 'add task failed',err:err })

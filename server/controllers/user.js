@@ -10,13 +10,16 @@ const signUp = (req, res) => {
     
     var salt = bcrypt.genSaltSync(saltRounds);
     var hash = bcrypt.hashSync(req.body.password, salt);
-    console.log('mmasusususus');
+    // console.log('mmasusususus');
     
     Model.findOne({
         email: req.body.email
     })
         .then(dataUser => {
             if (!dataUser) {
+                // console.log('==datauser===',dataUser);
+                // console.log('===req.body==',req.body);
+                
                 let { name, email, facebookID } = req.body
                 Model.create({
                     name: name,
@@ -25,7 +28,7 @@ const signUp = (req, res) => {
                     facebookID: facebookID
                 })
                     .then(function (data) {
-                        res.status(201).json({ msg: 'new user added', data: data })
+                        res.status(200).json({ msg: 'new user added', data: data })
                     })
                     .catch(function (err) {
                         res.status(500).json({ msg: 'add user failed' })
@@ -46,7 +49,7 @@ const signIn = (req, res) => {
                 let token = jwt.sign({ name: dataUser.name, email: dataUser.email }, 'secretkey')
                 let decodedPass = bcrypt.compare(req.body.password, dataUser.password)
                 if (decodedPass) {
-                    res.status(201).json({ token })
+                    res.status(200).json({ token })
                 } else {
                     res.status(400).json({ msg: "email/password is wrong" })
                 }
@@ -67,27 +70,32 @@ const loginFb = (req, res) => {
 
     axios.get(urlUserInfo)
         .then(function (dataFb) {
-            console.log('==========datafb=======', dataFb);
-
-            if (!dataFb) {
-                Model.create({
-                    name: result.data.name,
-                    email: result.data.email,
-                    facebookID: result.data.id
-                })
-                    .then(function (newUser) {
-                        let token = jwt.sign({ name: newUser.name, email: newUser.email }, 'secretkey')
-                        // res.json({ newUser, token })
-                        res.status(200).json({ msg: 'new user added', newUser, token })
-                        console.log('=======newUser======', newUser);
+            console.log('==========datafb.data=======', dataFb.data);
+            Model.findOne({
+                email:dataFb.data.email
+            })
+            .then(function(result){
+                if (!result) {
+                    Model.create({
+                        name: dataFb.data.name,
+                        email: dataFb.data.email,
+                        facebookID: dataFb.data.id
                     })
-                    .catch(function (err) {
-                        res.status(500).json({ msg: 'add new user failed', err })
-                    })
-            } else {
-                let token = jwt.sign({ name: dataFb.name, email: dataFb.email }, 'secretkey')
-                res.json({ dataFb, token })
-            }
+                        .then(function (newUser) {
+                            let token = jwt.sign({ name: newUser.name, email: newUser.email }, 'secretkey')
+                            // res.json({ newUser, token })
+                            res.status(200).json({ msg: 'new user added', newUser, token })
+                            console.log('=======newUser======', newUser);
+                        })
+                        .catch(function (err) {
+                            res.status(500).json({ msg: 'add new user failed', err })
+                        })
+                } else {
+                    let token = jwt.sign({ name: dataFb.data.name, email: dataFb.data.email }, 'secretkey')
+                    // res.json({ dataFb, token })
+                    res.status(200).json({ token })
+                }
+            })
         })
         .catch(function (err) {
             console.log('err bro', err);
