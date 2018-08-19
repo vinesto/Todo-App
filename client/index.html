@@ -5,94 +5,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- <link rel="stylesheet" href="css/helpers.css"> -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <title>Document</title>
+    <title>ToDo-App</title>
 </head>
 
 <body>
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '288262381979390',
-                autoLogAppEvents: true,
-                xfbml: true,
-                version: 'v3.1'
-            });
-        };
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+    <div class="has-navbar-fixed-top" id="app">
 
-        function checkLoginState() {
-            FB.getLoginStatus(function (response) {
-                console.log('------respons----',response);
-                if (response.status == 'connected') {
-                    axios.post('http://localhost:3000/users/loginFb',
-                        response.authResponse)
-                        .then((result) => {
-                            console.log('====result====',result);
-                            localStorage.setItem('token', result.data.token) //menyimpan ke localstorage
-                        }).catch((err) => {
-                            console.log(err);
-                        });
-                }
-            });
-        }
+        <script>
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: '288262381979390',
+                    autoLogAppEvents: true,
+                    xfbml: true,
+                    version: 'v3.1'
+                });
+            };
 
-        function login() {
-            let email = $('#email').val()
-            let password = $('#password').val()
-            axios.post('http://localhost:3000/users/login', {
-                email,
-                password
-            })
-                .then(dataLogin => {
-                    localStorage.setItem('token', dataLogin.data.token)
-                    localStorage.setItem('name', dataLogin.data.user.name)
-                    // console.log(data)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        }
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) { return; }
+                js = d.createElement(s); js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
 
-        function logOut() {
-            localStorage.removeItem('token')
-        }
-    </script>
+            function checkLoginState() {
+                FB.getLoginStatus(function (response) {
+                    // console.log('------respons----', response);
+                    if (response.status == 'connected') {
+                        // localStorage.setItem('tokenfb',response.authResponse.accessToken)
+                        axios.post('http://localhost:3000/users/loginFb',
+                            response.authResponse)
+                            .then((result) => {
+                                // console.log('====result====', result);
+                                localStorage.setItem('token', result.data.token)
+                                alert('login fb success')
+                                window.location.replace('dashboard.html')
+                                 //menyimpan ke localstorage
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+                    }
+                });
+            }
+        </script>
+        <div id="app">
+            <nav class="navbar is-mobile is-link is-transparent-top is-fixed-top" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <!-- navbar items, navbar burger... -->
+                    <a class="navbar-item">
+                        <i class="fas fa-book" style="font-size:37px; margin-right:10px; color:#363636"></i>
+                        <h1 class="title">Todo Web</h1>
+                    </a>
+                    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                <!-- navbar items, navbar burger... -->
+                <div class="navbar-menu">
 
+                    <!-- navbar start, navbar end -->
+                    <div class="navbar-start">
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                About
+                            </a>
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item">
+                                    Offline Store
+                                </a>
+                                <a class="navbar-item">
+                                    Contact Us
+                                </a>
+                                <hr class="navbar-divider">
+                                <!-- <div class="navbar-item">
+                                Version 0.7.1
+                            </div> -->
+                            </div>
+                        </div>
+                        <!-- navbar items -->
+                    </div>
 
-    <h2>Login Forms</h2>
+                    <div class="navbar-end is-mobile">
+                        
 
-    <form action="/action_page.php">
-        Email:
-        <br>
-        <input type="email" name="email" placeholder="insert email" id="email">
-        <br> Password:
-        <br>
-        <input type="password" name="password" placeholder="insert password" id="password">
-        <br>
-        <br>
-        <input type="submit" value="Submit" onclick="login">
-    </form>
+                        <figure class="navbar-item image has-text-black center">
+                            <div class="dropdown is-hoverable is-right">
+                                <div class="dropdown-trigger">
+                                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                        <i class="fas fa-bars" style="width: 1rem; height: 1rem;"></i>
+                                    </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                    <div class="dropdown-content">
+                                        <div class="dropdown-item">
+                                            <a href="#" class="dropdown-item">
+                                                Login
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Logout
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Settings
+                                            </a>
+                                            <hr class="dropdown-divider">
+                                            <a href="#" class="dropdown-item">
+                                                More
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </figure>
+                        <!-- navbar items -->
+                    </div>
+                    <!-- navbar start, navbar end -->
+                </div>
+            </nav>
 
-    <br>
-    <label>
-        <a href="http://localhost:8080/register.html">create account</a>
-    </label>
-    <br>
-    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-    </fb:login-button>
+            <div class="container" style="width:50%;">
+                <div class="field is-center" style="padding-top: 80px;">
+                    <h2 class="title">Login</h2>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" type="email" placeholder="Email" v-model="User.email">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field center">
+                    <p class="control has-icons-left">
+                        <input class="input" type="password" placeholder="Password" v-model="User.password">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-success" @click="loginUser">
+                            Login
+                        </button>
+                        or
+                        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" @click="loginfb">
+                        </fb:login-button>
+                    </p>
+                </div>
 
-
-
-
+                <label>
+                    <a href="http://localhost:8080/register.html">create account</a>
+                </label>
+                <label>
+                    <a href="http://localhost:8080/dashboard.html">pass</a>
+                </label>
+            </div>
+            <br>
+            <br>
+        </div>
+        <footer-a style="position:relative;"></footer-a>
+    </div>
+    <script src="components/footer.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
