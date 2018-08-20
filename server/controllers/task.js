@@ -1,4 +1,5 @@
 const Model = require('../models/task')
+const User = require('../models/user')
 const axios = require('axios')
 
 const createTask = function(req, res) {
@@ -19,7 +20,8 @@ const createTask = function(req, res) {
 }
 
 function readAllTask(req, res) {
-    Model.find({})
+    Model.find()
+    .populate('user')
         .then(function (data) {
             res.status(200).json({ msg: 'data found', data: data })
         })

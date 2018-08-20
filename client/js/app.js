@@ -140,6 +140,11 @@ var app = new Vue({
 
         completeTask:function(){
             
+        },
+
+
+        backToIndex:function(){
+            window.location.replace('index.html')
         }
 
     },
