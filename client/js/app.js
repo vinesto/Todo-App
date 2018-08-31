@@ -18,7 +18,7 @@ var app = new Vue({
     },
     methods: {
         registerUser: function () {
-            axios.post('http://localhost:3000/users/register', {
+            axios.post('http://35.202.97.56/users/register', {
                 name: this.User.name,
                 email: this.User.email,
                 password: this.User.password,
@@ -29,7 +29,7 @@ var app = new Vue({
                 })
         },
         loginUser: function () {
-            axios.post('http://localhost:3000/users/login', {
+            axios.post('http://35.202.97.56/users/login', {
                 email: this.User.email,
                 password: this.User.password
             })
@@ -50,7 +50,7 @@ var app = new Vue({
         },
         loginfb: function () {
             // console.log('masuuuuk login fb client');
-            axios.post('http://localhost:3000/users/loginFb', {
+            axios.post('http://35.202.97.56/users/loginFb', {
                 name: this.User.name,
                 email: this.User.email,
                 facebookID: this.User.facebookID
@@ -85,7 +85,7 @@ var app = new Vue({
             // console.log(this.Task.title);
             // console.log(localStorage.getItem("token"));
             
-            axios.post('http://localhost:3000/tasks',{
+            axios.post('http://35.202.97.56/tasks',{
                 taskName:this.Task.title,
                 description:this.Task.description,
                 dueDate:this.Task.dueDate
@@ -105,7 +105,7 @@ var app = new Vue({
         },
 
         deleteTask:function(id){
-            axios.delete(`http://localhost:3000/tasks/${id}`,{
+            axios.delete(`http://35.202.97.56/tasks/${id}`,{
                 headers:{
                     token:localStorage.getItem("token")
                 }
@@ -122,7 +122,7 @@ var app = new Vue({
 
         readAllTask:function(){
             let self=this
-            axios.get('http://localhost:3000/tasks',{
+            axios.get('http://35.202.97.56/tasks',{
                 headers:{
                     token:localStorage.getItem("token"),
                     json:true
