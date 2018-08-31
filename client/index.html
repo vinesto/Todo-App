@@ -42,7 +42,7 @@
                     // console.log('------respons----', response);
                     if (response.status == 'connected') {
                         // localStorage.setItem('tokenfb',response.authResponse.accessToken)
-                        axios.post('http://localhost:3000/users/loginFb',
+                        axios.post('http://35.202.97.56/users/loginFb',
                             response.authResponse)
                             .then((result) => {
                                 // console.log('====result====', result);
@@ -111,7 +111,7 @@
                 </div>
 
                 <label>
-                    <a href="http://localhost:8080/register.html">create account</a>
+                    <a href="http://35.202.97.56/register.html">create account</a>
                 </label>
             </div>
             <br>

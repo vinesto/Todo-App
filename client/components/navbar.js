@@ -44,7 +44,7 @@ Vue.component('navbar', {
 
                 <div class="navbar-end is-mobile">
                     <!-- navbar items -->
-                    <a class="navbar-item" href="http://localhost:8080/index.html" @click="logoutComp">
+                    <a class="navbar-item" href="http://todo.vinesto.xyz/index.html" @click="logoutComp">
                         Logout
                     </a>
                     <!-- navbar items -->
